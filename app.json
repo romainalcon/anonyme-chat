@@ -1,0 +1,21 @@
+{
+  "name": "anonyme-chat",
+  "description": "Chat anonyme permettant de discutter de sujet diverse",
+  "success_url": "/",
+  "keywords": [
+    "node",
+    "express",
+    "socket.io",
+    "realtime",
+    "websocket",
+    "faker"
+  ],
+  "scripts": {
+    "start": "node index.js"
+  },
+  "addons": [
+  ],
+  "env": {
+    "BUILDPACK_URL": "https://github.com/heroku/heroku-buildpack-nodejs"
+  }
+}

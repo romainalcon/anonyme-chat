@@ -1,0 +1,14 @@
+{
+  "name": "anonyme-chat",
+  "version": "0.0.1",
+  "description": "Chat anonyme permettant de discutter de sujet diverse",
+  "engines": {
+    "node": "14.x"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
