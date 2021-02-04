@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Anonyme Chat - Chat en direct anonyme</title>
+    <style>
+        *, ::before, ::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            flex: 1;
+            padding-bottom: 54px;
+            font-size: 19px;
+        }
+        form {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #101010;
+            padding: 12px 20px;
+            display: flex;
+            flex-direction: row;
+            z-index: 1000;
+        }
+        form label {
+            flex: 1;
+            margin-right: 10px;
+        }
+        form label input {
+            width: 100%;
+            padding: 0 10px;
+            outline: none;
+            border: none;
+            border-radius: 5px;
+            height: 30px;
+            font-size: 14px;
+        }
+        form button {
+            outline: none;
+            border: none;
+            background: #F78A8E;
+            padding: 0 15px;
+            font-size: 14px;
+            color: #ffffff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color .3s ease-in-out;
+        }
+        form button:hover {
+            background: #F35D63;
+        }
+        .container__left {
+            flex: 1;
+        }
+        .container__right {
+            width: 270px;
+            background: #2D2D2D;
+            color: #ffffff;
+        }
+        .container ul {
+            height: 100%;
+            width: 100%;
+            overflow-y: auto;
+            list-style: none;
+        }
+        ul::-webkit-scrollbar {
+            background: none;
+            width: 8px;
+        }
+        ul::-webkit-scrollbar-thumb {
+            background: #F78A8E;
+        }
+        .container__right ul li:nth-child(even) {
+            background: #3B3B3B;
+        }
+        .container__left ul li:nth-child(even) {
+            background: #F2F2F2;
+        }
+        .container__right ul li:first-of-type {
+            background: #475165;
+        }
+        .container li {
+            padding: 15px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="container__left">
+            <ul id="messages">
+                <li>Salut</li>
+                <li>Salut</li>
+            </ul>
+        </div>
+        <div class="container__right">
+            <ul id="users">
+                <li><strong>Liste des utilisateurs</strong></li>
+                <li>Liste des utilisateurs</li>
+                <li>Liste des utilisateurs</li>
+            </ul>
+        </div>
+    </div>
+    <form action="" id="form">
+        <label>
+            <input type="text" autocomplete="off" autofocus>
+        </label>
+        <button>Envoyer</button>
+    </form>
+</body>
+</html>
