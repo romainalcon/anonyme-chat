@@ -1,6 +1,6 @@
 {
   "name": "anonyme-chat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chat anonyme permettant de discutter de sujet diverse",
   "engines": {
     "node": "14.x"
