@@ -99,24 +99,78 @@
 <body>
     <div class="container">
         <div class="container__left">
-            <ul id="messages">
-                <li>Salut</li>
-                <li>Salut</li>
-            </ul>
+            <ul id="messages"></ul>
         </div>
         <div class="container__right">
             <ul id="users">
                 <li><strong>Liste des utilisateurs</strong></li>
-                <li>Liste des utilisateurs</li>
-                <li>Liste des utilisateurs</li>
             </ul>
         </div>
     </div>
     <form action="" id="form">
         <label>
-            <input type="text" autocomplete="off" autofocus>
+            <input type="text" autocomplete="off" autofocus id="input">
         </label>
         <button>Envoyer</button>
     </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket = io();
+        let curId;
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('input')
+        const messages = document.getElementById('messages');
+        const users = document.getElementById('users');
+
+        socket.on('connect', function () {
+            curId = socket.id;
+            socket.emit('connected', socket.id);
+        });
+
+        socket.on('chat_message', function (msg) {
+            let item = document.createElement('li');
+            item.innerHTML = msg;
+            messages.appendChild(item);
+            messages.scrollTo(0, messages.scrollHeight);
+        });
+
+        socket.on('user_connected', function (informations) {
+            if (informations.id === curId) {
+                informations.usersList.forEach(value => {
+                    addUser(value);
+                });
+            } else {
+                addUser(informations.user);
+            }
+        });
+
+        socket.on('user_disconnected', function (value) {
+            removeUser(value);
+        });
+
+        function addUser(value) {
+            let item = document.createElement('li');
+            item.innerHTML = value;
+            users.appendChild(item);
+        }
+
+        function removeUser(value) {
+            let items = users.getElementsByTagName('li');
+            for (let item of items) {
+                if (item.textContent === value) {
+                    item.remove();
+                }
+            }
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat_message', input.value);
+                input.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
