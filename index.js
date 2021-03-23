@@ -1,7 +1,8 @@
 const app = require('express')();
 const http = require('http').createServer(app)
 const io = require('socket.io')(http);
-const faker = require('faker')
+const faker = require('faker');
+const { Console } = require('console');
 faker.setLocale('fr');
 const PORT = process.env.PORT || 5000;
 
@@ -56,6 +57,16 @@ io.on('connection', (socket) => {
      * En cas d'envoie de message
      */
     socket.on('chat_message', (msg) => {
+        let words = msg.split(" ");
+        for (i = 0; i < words.length; i++) {
+            /**
+             * Liste des mes regex 
+             */
+            if (words[i].match("https?:\/\/[a-z0-9\/:%_+.,#?!@&=-]+")) {
+                words[i] = '<a target="_blank" href="'+words[i]+'">'+words[i]+'</a>';
+            }
+        }
+        msg = words.join(" ");
         io.emit('chat_message' ,'<strong>'+username+':</strong> '+msg);
     });
 });
