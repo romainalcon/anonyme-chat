@@ -135,6 +135,7 @@
 
         socket.on('connect', function () {
             curId = socket.id;
+            console.log(curId);
             socket.emit('connected', socket.id);
         });
 
@@ -143,6 +144,19 @@
             item.innerHTML = msg;
             messages.appendChild(item);
             messages.scrollTo(0, messages.scrollHeight);
+        });
+
+        socket.on('personal_message', function (value) {
+            if (value.id === curId) {
+                let item = document.createElement('li');
+                item.innerHTML = value.msg;
+                messages.appendChild(item);
+                messages.scrollTo(0, messages.scrollHeight);
+            }
+        });
+
+        socket.on('replace_list', function (value) {
+            replaceUser(value);
         });
 
         socket.on('user_connected', function (informations) {
@@ -162,6 +176,15 @@
         socket.on('refresh_all', function (value) {
             location.reload();
         });
+
+        function replaceUser(value) {
+            let items = users.getElementsByTagName('li');
+            for (let item of items) {
+                if (item.textContent === value.before) {
+                    item.textContent = value.after;
+                }
+            }
+        }
 
         function addUser(value) {
             let item = document.createElement('li');

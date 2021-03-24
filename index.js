@@ -77,19 +77,20 @@ io.on('connection', (socket) => {
             normal = false;
             if (words[1] === 'romain') {
                 admin = true;
-                msg = '<span class="login">'+username+' vient de passer admin !'+'</span>';
+                io.emit('personal_message', {id: userid, msg: '<span class="login">Vous venez de passer admin !</span>'});
             } else {
                 admin = false;
-                msg = '<span class="login">'+username+' vient d\'essayer de devenir admin !'+'</span>';
+                io.emit('personal_message', {id: userid, msg: '<span class="login">Ce n\'est pas le bon mot de passe !</span>'});
             }
         }
 
         if (admin && words.length >= 1) {
             if (words[0] == '#name' && words.length == 2) {
                 normal = false;
-                msg = '<span class="login">'+username;
+                let beforeUsername = username;
                 username = words[1] +  usernameId;
-                msg = msg + ' vient de devenir '+username+'</span>';
+                io.emit('replace_list', {before: beforeUsername, after: username});
+                io.emit('personal_message', {id: userid, msg: '<span class="login">Tu viens de devenir '+username+' !</span>'});
             }
 
             if (words[0] == '#refresh' && words.length == 1) {
@@ -99,8 +100,6 @@ io.on('connection', (socket) => {
         
         if (normal) {
             io.emit('chat_message' ,'<strong>'+username+':</strong> '+msg);
-        } else {
-            io.emit('chat_message' ,msg);
         }
     });
 });
