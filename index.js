@@ -11,16 +11,18 @@ const PORT = process.env.PORT || 5000;
  * @type {*[]}
  */
 let users = [];
+let usersId = [];
 
 app.get('/', (req, res) => {
    res.sendFile(__dirname + '/public/index.html');
 });
 
 io.on('connection', (socket) => {
-    let usernameId = ' (' + (Math.floor(Math.random() * 999) + 1) + ')';
-    let username = faker.name.firstName() + usernameId;
+    let usernameId = (Math.floor(Math.random() * 999) + 1);
+    let username = faker.name.firstName() + ' (' + usernameId + ')';
     let userid;
     let admin = false;
+    let muted = false;
 
     /**
      * En cas de connexion
@@ -28,6 +30,7 @@ io.on('connection', (socket) => {
     socket.on('connected', (id) => {
         userid = id;
         users.push(username);
+        usersId.push(usernameId);
         io.emit('chat_message', '[<span style="color: #42B823; font-weight: bold">#</span>] '+username);
         io.emit('user_connected', {user: username, id: userid, usersList: users})
     });
@@ -48,6 +51,17 @@ io.on('connection', (socket) => {
             }
         });
         users = newUsers;
+
+        /**
+         * Retirer de la liste
+         */
+        let newUsersId = [];
+        usersId.forEach(value => {
+            if (value !==  usernameId) {
+                newUsersId.push(value);
+            }
+        });
+        usersId = newUsersId;
 
         /**
          * Envoyer la suppression de l'utilisateur
@@ -88,7 +102,12 @@ io.on('connection', (socket) => {
             if (words[0] == '#name' && words.length == 2) {
                 normal = false;
                 let beforeUsername = username;
-                username = words[1] +  usernameId;
+                username = words[1] + ' (' +  usernameId + ')';
+                for (let i = 0; i < users.length; i++) {
+                    if (users[i] == beforeUsername) {
+                        users[i] = username;
+                    }
+                }
                 io.emit('replace_list', {before: beforeUsername, after: username});
                 io.emit('personal_message', {id: userid, msg: '<span class="login">Tu viens de devenir '+username+' !</span>'});
             }
