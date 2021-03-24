@@ -19,6 +19,7 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
     let username = faker.name.firstName() + ' (' + (Math.floor(Math.random() * 999) + 1) + ')';
     let userid;
+    let admin = false;
 
     /**
      * En cas de connexion
@@ -57,6 +58,7 @@ io.on('connection', (socket) => {
      * En cas d'envoie de message
      */
     socket.on('chat_message', (msg) => {
+        let normal = true;
         let words = msg.split(" ");
         for (i = 0; i < words.length; i++) {
             /**
@@ -66,8 +68,26 @@ io.on('connection', (socket) => {
                 words[i] = '<a target="_blank" href="'+words[i]+'">'+words[i]+'</a>';
             }
         }
+
         msg = words.join(" ");
-        io.emit('chat_message' ,'<strong>'+username+':</strong> '+msg);
+        
+        /* Test si login */
+        if (words.length == 2 && words[0] == '#login') {
+            normal = false;
+            if (words[1] === 'romain') {
+                admin = true;
+                msg = '<span class="login">'+username+' vient de passer admin !'+'</span>';
+            } else {
+                admin = false;
+                msg = '<span class="login">'+username+' vient d\'essayer de devenir admin !'+'</span>';
+            }
+        }
+        
+        if (normal) {
+            io.emit('chat_message' ,'<strong>'+username+':</strong> '+msg);
+        } else {
+            io.emit('chat_message' ,msg);
+        }
     });
 });
 
