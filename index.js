@@ -84,12 +84,16 @@ io.on('connection', (socket) => {
             }
         }
 
-        if (admin && words.length > 1) {
+        if (admin && words.length >= 1) {
             if (words[0] == '#name' && words.length == 2) {
                 normal = false;
                 msg = '<span class="login">'+username;
                 username = words[1] +  usernameId;
                 msg = msg + ' vient de devenir '+username+'</span>';
+            }
+
+            if (words[0] == '#refresh' && words.length == 1) {
+                io.emit('refresh_all');
             }
         }
         

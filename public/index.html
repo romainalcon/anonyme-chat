@@ -159,6 +159,10 @@
             removeUser(value);
         });
 
+        socket.on('refresh_all', function (value) {
+            location.reload();
+        });
+
         function addUser(value) {
             let item = document.createElement('li');
             item.innerHTML = value;
