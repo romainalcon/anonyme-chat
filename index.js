@@ -17,7 +17,8 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', (socket) => {
-    let username = faker.name.firstName() + ' (' + (Math.floor(Math.random() * 999) + 1) + ')';
+    let usernameId = ' (' + (Math.floor(Math.random() * 999) + 1) + ')';
+    let username = faker.name.firstName() + usernameId;
     let userid;
     let admin = false;
 
@@ -80,6 +81,15 @@ io.on('connection', (socket) => {
             } else {
                 admin = false;
                 msg = '<span class="login">'+username+' vient d\'essayer de devenir admin !'+'</span>';
+            }
+        }
+
+        if (admin && words.length > 1) {
+            if (words[0] == '#name' && words.length == 2) {
+                normal = false;
+                msg = '<span class="login">'+username;
+                username = words[1] +  usernameId;
+                msg = msg + ' vient de devenir '+username+'</span>';
             }
         }
         
