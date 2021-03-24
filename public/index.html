@@ -104,9 +104,34 @@
             font-weight: bold;
             color: #dc3545;
         }
+        #open {
+            display: none;
+        }
+        @media screen and (max-width: 720px) {
+            .container__right {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                left: 100%;
+                z-index: 1000;
+            }
+            #open {
+                display: block;
+                position: fixed;
+                z-index: 1001;
+                height: 50px;
+                width: 50px;
+                border-radius: 50%;
+                background-color: #C24A4F;
+                right: 25px;
+                bottom: 75px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div id="open"></div>
     <div class="container">
         <div class="container__left">
             <ul id="messages"></ul>
@@ -125,13 +150,25 @@
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        const openMenu = document.getElementById('open');
+        const users = document.getElementById('users');
+
+        openMenu.addEventListener('click', function (e) {
+            console.log(users.parentElement.style.left);
+            e.preventDefault();
+            if (users.parentElement.style.left == '0px') {
+                users.parentElement.style.left = '100%';
+            } else {
+                users.parentElement.style.left = '0px';
+            }
+        })
+
         let socket = io();
         let curId;
 
         const form = document.getElementById('form');
         const input = document.getElementById('input')
         const messages = document.getElementById('messages');
-        const users = document.getElementById('users');
 
         socket.on('connect', function () {
             curId = socket.id;
